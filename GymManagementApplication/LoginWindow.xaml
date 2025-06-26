@@ -1,0 +1,57 @@
+﻿<Window x:Class="GymManagementApplication.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Đăng nhập - GymManagement" Height="480" Width="400"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="#FF1E1E2F">
+    <Grid>
+        <!-- Gradient Background -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#FF2C2F48" Offset="0"/>
+                <GradientStop Color="#FF1E1E2F" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Login Card -->
+        <Border Width="320" Height="400" Background="White" CornerRadius="15"
+                VerticalAlignment="Center" HorizontalAlignment="Center" Padding="20">
+            <StackPanel>    
+                <TextBlock Text="Đăng nhập" FontSize="26" FontWeight="Bold" Foreground="#2C2F48"
+                           HorizontalAlignment="Center" Margin="0,10,0,20"/>
+
+                <TextBlock Text="Tên đăng nhập" Margin="0,0,0,5" FontWeight="SemiBold" Foreground="#2C2F48"/>
+                <TextBox Name="txtUsername" Height="35" Background="#F3F3F3" BorderThickness="0"
+                         Padding="10" FontSize="14" KeyDown="txtUsername_KeyDown"/>
+
+                <TextBlock Text="Mật khẩu" Margin="0,15,0,5" FontWeight="SemiBold" Foreground="#2C2F48"/>
+                <!-- Mật khẩu: Grid chứa PasswordBox, TextBox và Button -->
+                <Grid>
+                    <PasswordBox Name="txtPassword" Height="35" Background="#F3F3F3" BorderThickness="0"
+                                 Padding="10" FontSize="14" KeyDown="txtPassword_KeyDown"
+                                 Visibility="Visible"/>
+                    <TextBox Name="txtPasswordVisible" Height="35" Background="#F3F3F3" BorderThickness="0"
+                             Padding="10" FontSize="14" Visibility="Collapsed"
+                             VerticalContentAlignment="Center"/>
+                    <Button Name="btnTogglePassword" Width="30" Height="30" HorizontalAlignment="Right"
+                            VerticalAlignment="Center" Margin="0,0,5,0"
+                            Click="btnTogglePassword_Click"
+                            Background="Transparent" BorderBrush="{x:Null}">
+                        <Image Name="imgTogglePassword" Width="20" Height="20"
+                               Source="/image/eye.png"/>
+                    </Button>
+                </Grid>
+
+                <Button Content="Đăng nhập" Height="40" Margin="0,25,0,0" Background="#4CAF50"
+                        Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}"
+                        Click="BtnLogin_Click" Cursor="Hand"/>
+
+                <Button Content="Quên mật khẩu?" Background="Transparent" BorderBrush="{x:Null}"
+                        Foreground="#4CAF50" FontSize="12" Click="BtnForgotPassword_Click"
+                        Margin="0,10,0,0" Cursor="Hand"/>
+
+                <TextBlock Name="lblMessage" FontSize="12" Foreground="Red"
+                           TextAlignment="Center" Margin="0,10,0,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
