@@ -20,6 +20,7 @@ namespace GymManagementApplication
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             Login();
+
         }
 
         private void txtUsername_KeyDown(object sender, KeyEventArgs e)
@@ -72,6 +73,7 @@ namespace GymManagementApplication
 
         private void Login()
         {
+
             string username = txtUsername.Text.Trim();
             string password = isPasswordVisible ? txtPasswordVisible.Text.Trim() : txtPassword.Password.Trim();
 
@@ -90,8 +92,9 @@ namespace GymManagementApplication
 
                     if (user != null)
                     {
-                        MainWindow mainWindow = new MainWindow();
-                        mainWindow.Show();
+                        // Đăng nhập thành công, báo cho App.xaml.cs biết
+                        this.Tag = user; // Lưu user để truyền sang MainWindow nếu cần
+                        this.DialogResult = true;
                         this.Close();
                     }
                     else
@@ -110,5 +113,7 @@ namespace GymManagementApplication
         {
             MessageBox.Show("Vui lòng liên hệ quản trị viên để lấy lại mật khẩu.", "Quên mật khẩu", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+
     }
 }

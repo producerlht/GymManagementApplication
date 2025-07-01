@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ApplicationDefinition Remove="App.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Resources\eye-off.png" />
     <None Remove="Resources\eye.png" />
   </ItemGroup>
@@ -34,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="App.xaml" />
     <Resource Include="Resources\eye-off.png" />
     <Resource Include="Resources\eye.png" />
   </ItemGroup>
