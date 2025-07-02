@@ -13,10 +13,15 @@ namespace GymManagementApplication
 
         public MainWindow(User currentUser)
         {
-            InitializeComponent();
-            _currentUser = currentUser;
-            txtUserFullName.Text = _currentUser.FullName ?? _currentUser.Username;
-            LoadMembers();
+            try
+            {
+                InitializeComponent();
+                _currentUser = currentUser;
+                txtUserFullName.Text = _currentUser.FullName ?? _currentUser.Username;
+                LoadMembers();
+            } catch(Exception e) {
+                MessageBox.Show("Lỗi khởi tạo: " + e.Message);
+            }
         }
 
         // ====== MENU ======
