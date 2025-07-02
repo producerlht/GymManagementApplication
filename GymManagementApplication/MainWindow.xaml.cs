@@ -51,9 +51,20 @@ namespace GymManagementApplication
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            this.Close();
+            this.Hide();
+            
+            var loginWindow = new LoginWindow();    
+            bool? result = loginWindow.ShowDialog();
+
+            if (result == true)
+            {
+                this.Close();
+                LoadMembers();
+            }
+            else
+            {
+                Application.Current.Shutdown();
+            }
         }
 
         // ====== DỮ LIỆU HỘI VIÊN ======
@@ -136,30 +147,36 @@ namespace GymManagementApplication
         private void UserDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             if (e.EditAction == DataGridEditAction.Commit)
-            {
+            { 
                 var editedMember = e.Row.Item as Member;
                 if (editedMember != null)
                 {
                     using (var db = new GymManagementContext())
                     {
-                        var member = db.Members.FirstOrDefault(m => m.MemberId == editedMember.MemberId);
-                        if (member != null)
+                        if(editedMember.MemberId == 0)
                         {
-                            // Cập nhật thông tin
-                            member.FullName = editedMember.FullName;
-                            member.Gender = editedMember.Gender;
-                            member.BirthDate = editedMember.BirthDate;
-                            member.Phone = editedMember.Phone;
+                            //add
+                            db.Members.Add(editedMember);
+                            db.SaveChanges();
+                            LoadMembers();
                         }
                         else
-                        {
-                            // Thêm mới nếu là dòng mới
-                            db.Members.Add(editedMember);
+                        { 
+                            //sua
+                            var member = db.Members.FirstOrDefault(m => m.MemberId == editedMember.MemberId);
+                            if(member != null)
+                            {
+                                member.FullName = editedMember.FullName;
+                                member.Gender = editedMember.Gender;
+                                member.BirthDate = editedMember.BirthDate;
+                                member.Phone = editedMember.Phone;
+                                db.SaveChanges();
+                            }
                         }
-                        db.SaveChanges();
                     }
                 }
             }
+
         }
     }
 }
