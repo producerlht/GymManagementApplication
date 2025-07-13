@@ -15,7 +15,7 @@ namespace GymManagementApplication
             Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             var loginWindow = new LoginWindow();
-            bool? result = loginWindow.ShowDialog(); // PHẢI dùng ShowDialog()
+            bool? result = loginWindow.ShowDialog(); 
 
             if (result == true && loginWindow.Tag is User user)
             {
@@ -27,8 +27,8 @@ namespace GymManagementApplication
             }
             else
             {
-                Application.Current.Shutdown(); // Đóng ứng dụng nếu không đăng nhập thành công
+                Application.Current.Shutdown(); 
             }
         }
-    }
+    } 
 }
