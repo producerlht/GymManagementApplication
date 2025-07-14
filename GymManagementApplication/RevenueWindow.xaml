@@ -1,7 +1,7 @@
 ﻿<Window x:Class="GymManagementApplication.RevenueWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Quản lý doanh thu" Height="620" Width="1050"
+        Title="Quản lý doanh thu" Height="650" Width="1100"
         WindowStartupLocation="CenterScreen"
         Background="#ecf0f1">
 
@@ -16,19 +16,35 @@
 
         <!-- Tiêu đề -->
         <TextBlock Text="QUẢN LÝ DOANH THU"
-                   FontSize="20"
+                   FontSize="22"
                    FontWeight="Bold"
                    Foreground="#2c3e50"
                    HorizontalAlignment="Center"
                    Margin="0 0 0 10"/>
 
-        <!-- Bộ lọc theo ngày -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 0 0 10">
-            <Label Content="Từ ngày:" VerticalAlignment="Center"/>
-            <DatePicker x:Name="StartDatePicker" Width="120" Margin="5 0"/>
-            <Label Content="Đến ngày:" VerticalAlignment="Center"/>
-            <DatePicker x:Name="EndDatePicker" Width="120" Margin="5 0"/>
-            <Button Content="Lọc" Width="80" Margin="10 0" Click="BtnFilter_Click"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
+            <!-- Ngày -->
+            <StackPanel Orientation="Horizontal" Margin="10 0">
+                <Label Content="Ngày:"/>
+                <DatePicker x:Name="FilterDatePicker" Width="130" Margin="5 0"/>
+                <Button Content="Lọc ngày" Width="90" Margin="5 0" Click="BtnFilterByDate_Click"/>
+            </StackPanel>
+
+            <!-- Tháng -->
+            <StackPanel Orientation="Horizontal" Margin="10 0">
+                <Label Content="Tháng:"/>
+                <ComboBox x:Name="MonthComboBox" Width="60" Margin="5 0"/>
+                <Label Content="Năm:" Margin="5 0 0 0"/>
+                <ComboBox x:Name="YearForMonthComboBox" Width="80" Margin="5 0"/>
+                <Button Content="Lọc tháng" Width="90" Margin="5 0" Click="BtnFilterByMonth_Click"/>
+            </StackPanel>
+
+            <!-- Năm -->
+            <StackPanel Orientation="Horizontal" Margin="10 0">
+                <Label Content="Năm:"/>
+                <ComboBox x:Name="YearComboBox" Width="80" Margin="5 0"/>
+                <Button Content="Lọc năm" Width="90" Margin="5 0" Click="BtnFilterByYear_Click"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Bảng dữ liệu -->
@@ -38,22 +54,20 @@
                   CanUserAddRows="False"
                   IsReadOnly="True"
                   SelectionMode="Single"
-                  CellEditEnding="RevenueDataGrid_CellEditEnding"
-                  SelectionChanged="RevenueDataGrid_SelectionChanged"
                   AlternatingRowBackground="#f5f6fa"
                   RowHeight="30"
                   ColumnHeaderHeight="30"
                   Margin="0 0 0 10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding RevenueId}" IsReadOnly="True" Width="60"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding RevenueId}" Width="60"/>
                 <DataGridTextColumn Header="Hội viên" Binding="{Binding Member.FullName}" Width="200"/>
                 <DataGridTextColumn Header="Ngày thanh toán" Binding="{Binding PaymentDate, StringFormat=dd/MM/yyyy}" Width="150"/>
-                <DataGridTextColumn Header="Số tiền" Binding="{Binding Amount}" Width="100"/>
+                <DataGridTextColumn Header="Số tiền" Binding="{Binding Amount, StringFormat=N0}" Width="120"/>
                 <DataGridTextColumn Header="Ghi chú" Binding="{Binding Note}" Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Tổng tiền -->
+        <!-- Tổng doanh thu -->
         <TextBlock x:Name="TotalAmountTextBlock"
                    Grid.Row="3"
                    FontSize="14"

@@ -18,6 +18,7 @@ namespace GymManagementApplication
         {
             InitializeComponent();
             LoadRevenues();
+            InitializeFilters();
         }
 
         private void LoadRevenues()
@@ -38,31 +39,76 @@ namespace GymManagementApplication
             TotalAmountTextBlock.Text = $"Tổng doanh thu: {total:N0} VND";
         }
 
-        private void BtnFilter_Click(object sender, RoutedEventArgs e)
+        private void InitializeFilters()
         {
-            DateTime? from = StartDatePicker.SelectedDate;
-            DateTime? to = EndDatePicker.SelectedDate;
+            // Tháng: 1–12
+            MonthComboBox.ItemsSource = Enumerable.Range(1, 12);
+            MonthComboBox.SelectedIndex = DateTime.Now.Month - 1;
 
-            if (from == null || to == null)
+            // Năm: từ 2020 đến hiện tại
+            int currentYear = DateTime.Now.Year;
+            var years = Enumerable.Range(2020, currentYear - 2020 + 1).ToList();
+            YearComboBox.ItemsSource = years;
+            YearForMonthComboBox.ItemsSource = years;
+            YearComboBox.SelectedItem = currentYear;
+            YearForMonthComboBox.SelectedItem = currentYear;
+        }
+
+        private void BtnFilterByDate_Click(object sender, RoutedEventArgs e)
+        {
+            if (FilterDatePicker.SelectedDate == null)
             {
-                MessageBox.Show("Vui lòng chọn ngày bắt đầu và kết thúc.");
+                MessageBox.Show("Vui lòng chọn ngày cần lọc.");
                 return;
             }
 
-            filteredRevenues = new ObservableCollection<Revenue>(
-                allRevenues.Where(r =>
-                    r.PaymentDate.ToDateTime(TimeOnly.MinValue) >= from &&
-                    r.PaymentDate.ToDateTime(TimeOnly.MinValue) <= to
-                )
-            );
+            var selectedDate = DateOnly.FromDateTime(FilterDatePicker.SelectedDate.Value);
+
+            var filtered = allRevenues.Where(r => r.PaymentDate == selectedDate).ToList();
+
+            filteredRevenues = new ObservableCollection<Revenue>(filtered);
 
             RevenueDataGrid.ItemsSource = filteredRevenues;
-            UpdateTotal();
+            decimal total = filteredRevenues.Sum(r => r.Amount);
+            TotalAmountTextBlock.Text = $"Tổng doanh thu ngày {selectedDate}: {total:N0} VND";
         }
 
-        private void RevenueDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void BtnFilterByMonth_Click(object sender, RoutedEventArgs e)
         {
-            selectedRevenue = RevenueDataGrid.SelectedItem as Revenue;
+            if (MonthComboBox.SelectedItem == null || YearForMonthComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Vui lòng chọn tháng và năm.");
+                return;
+            }
+
+            int month = (int)MonthComboBox.SelectedItem;
+            int year = (int)YearForMonthComboBox.SelectedItem;
+
+            var filtered = allRevenues.Where(r => r.PaymentDate.Month == month && r.PaymentDate.Year == year).ToList();
+
+            filteredRevenues = new ObservableCollection<Revenue>(filtered);
+            RevenueDataGrid.ItemsSource = filteredRevenues;
+
+            decimal total = filteredRevenues.Sum(r => r.Amount);
+            TotalAmountTextBlock.Text = $"Tổng doanh thu tháng {month}/{year}: {total:N0} VND";
+        }
+
+        private void BtnFilterByYear_Click(object sender, RoutedEventArgs e)
+        {
+            if(YearComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Vui lòng chọn năm.");
+                return;
+            }
+            int year = (int)YearComboBox.SelectedItem;
+
+            var filtered = allRevenues.Where(r => r.PaymentDate.Year == year).ToList();
+            filteredRevenues = new ObservableCollection<Revenue>(filtered);
+            RevenueDataGrid.ItemsSource = filteredRevenues;
+
+            decimal total = filteredRevenues.Sum(r => r.Amount);
+            TotalAmountTextBlock.Text = $"Tổng doanh thu năm {year}: {total:N0} VND";
+        
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
@@ -75,7 +121,7 @@ namespace GymManagementApplication
                 return;
             }
 
-            var newRev = new Revenue
+            var newRevenue = new Revenue
             {
                 MemberId = member.MemberId,
                 Member = member,
@@ -84,10 +130,10 @@ namespace GymManagementApplication
                 Note = ""
             };
 
-            allRevenues.Add(newRev);
-            filteredRevenues.Add(newRev);
-            RevenueDataGrid.SelectedItem = newRev;
-            RevenueDataGrid.ScrollIntoView(newRev);
+            allRevenues.Add(newRevenue);
+            filteredRevenues.Add(newRevenue);
+            RevenueDataGrid.SelectedItem = newRevenue;
+            RevenueDataGrid.ScrollIntoView(newRevenue);
             RevenueDataGrid.IsReadOnly = false;
             UpdateTotal();
         }
@@ -154,14 +200,24 @@ namespace GymManagementApplication
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
         {
-            StartDatePicker.SelectedDate = null;
-            EndDatePicker.SelectedDate = null;
-            LoadRevenues();
+            FilterDatePicker.SelectedDate = null;
+            MonthComboBox.SelectedItem = null;
+            YearForMonthComboBox.SelectedItem = null;
+            YearComboBox.SelectedItem = null;
+
+            filteredRevenues = new ObservableCollection<Revenue>(allRevenues);
+            RevenueDataGrid.ItemsSource = filteredRevenues;
+            UpdateTotal();
+        }
+
+        private void RevenueDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedRevenue = RevenueDataGrid.SelectedItem as Revenue;
         }
 
         private void RevenueDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            // Optional xử lý khi sửa ô
+            // Xử lý nếu cần
         }
     }
 }
