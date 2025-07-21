@@ -3,6 +3,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Danh sách hội viên" Height="600" Width="1100"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!-- Màu chính -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#e67e22"/>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#d35400"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid Background="#f5f6fa" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -10,16 +38,22 @@
         </Grid.ColumnDefinitions>
 
         <!-- Danh sách hội viên -->
-        <Border Background="White" CornerRadius="8" Margin="5" Padding="10">
+        <Border Background="White" CornerRadius="8" Margin="5" Padding="10" BorderBrush="#dcdde1" BorderThickness="1">
             <StackPanel>
-                <TextBlock Text="DANH SÁCH HỘI VIÊN" FontWeight="Bold" FontSize="16" Margin="0 0 0 10"/>
+                <TextBlock Text="DANH SÁCH HỘI VIÊN" FontWeight="Bold" FontSize="18" Foreground="#2c3e50" Margin="0 0 0 10"/>
                 <DataGrid x:Name="MembersDataGrid"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           IsReadOnly="False"
                           SelectionChanged="MembersDataGrid_SelectionChanged"
                           CellEditEnding="MembersDataGrid_CellEditEnding"
-                          Margin="0 0 0 10">
+                          Margin="0 0 0 10"
+                          GridLinesVisibility="Vertical"
+                          ColumnHeaderHeight="30"
+                          RowHeight="28"
+                          HeadersVisibility="Column"
+                          BorderBrush="#bdc3c7"
+                          BorderThickness="1">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding MemberId}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Họ tên" Binding="{Binding FullName}"/>
@@ -29,19 +63,19 @@
                 </DataGrid>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Thêm" Width="70" Margin="5" Click="BtnAdd_Click"/>
-                    <Button Content="Sửa" Width="70" Margin="5" Click="BtnEdit_Click"/>
-                    <Button Content="Xóa" Width="70" Margin="5" Click="BtnDelete_Click"/>
-                    <Button Content="Lưu" Width="70" Margin="5" Click="BtnSave_Click"/>
+                    <Button Content="Thêm" Width="70" Click="BtnAdd_Click"/>
+                    <Button Content="Sửa" Width="70" Click="BtnEdit_Click"/>
+                    <Button Content="Xóa" Width="70" Click="BtnDelete_Click"/>
+                    <Button Content="Lưu" Width="70" Click="BtnSave_Click"/>
                 </StackPanel>
             </StackPanel>
         </Border>
 
         <!-- Thông tin chi tiết -->
-        <Border Grid.Column="1" Background="White" CornerRadius="8" Margin="5" Padding="20">
+        <Border Grid.Column="1" Background="White" CornerRadius="8" Margin="5" Padding="20" BorderBrush="#dcdde1" BorderThickness="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <TextBlock Text="THÔNG TIN CHI TIẾT" FontSize="18" FontWeight="Bold" Margin="0 0 0 15" Foreground="#2c3e50"/>
+                    <TextBlock Text="THÔNG TIN CHI TIẾT" FontSize="18" FontWeight="Bold" Margin="0 0 0 15" Foreground="#e67e22"/>
 
                     <!-- Thông tin cá nhân -->
                     <Grid Margin="0 0 0 20">
@@ -68,7 +102,7 @@
                     <!-- Thông tin gói tập -->
                     <Border Background="#ecf0f1" Padding="10" CornerRadius="5" Margin="0 10 0 10">
                         <StackPanel>
-                            <TextBlock Text="GÓI TẬP HIỆN TẠI" FontWeight="Bold" FontSize="15" Margin="0 0 0 10"/>
+                            <TextBlock Text="GÓI TẬP HIỆN TẠI" FontWeight="Bold" FontSize="15" Foreground="#2980b9" Margin="0 0 0 10"/>
                             <StackPanel Orientation="Horizontal" Margin="0 5">
                                 <TextBlock Text="Tên gói: " FontWeight="Bold" Width="120"/>
                                 <TextBlock x:Name="txtPackageName"/>
@@ -93,9 +127,9 @@
                     </Border>
 
                     <!-- Thêm gói tập mới -->
-                    <Border Background="#dff0d8" Padding="10" CornerRadius="5" Margin="0 0 0 10" Width="345">
+                    <Border Background="#fef9e7" Padding="10" CornerRadius="5" Margin="0 0 0 10" Width="345">
                         <StackPanel>
-                            <TextBlock Text="THÊM GÓI TẬP CHO HỘI VIÊN MỚI" FontWeight="Bold" FontSize="15" Margin="0 0 0 10"/>
+                            <TextBlock Text="THÊM GÓI TẬP CHO HỘI VIÊN MỚI" FontWeight="Bold" FontSize="15" Foreground="#d35400" Margin="0 0 0 10"/>
                             <StackPanel Orientation="Horizontal" Margin="0 5">
                                 <TextBlock Text="Loại gói:" FontWeight="Bold" Width="120"/>
                                 <ComboBox x:Name="cbPackageType" Width="200" DisplayMemberPath="TypeName"/>
@@ -112,12 +146,12 @@
                     </Border>
 
                     <!-- Quảng cáo -->
-                    <Border Background="#f9fafc" CornerRadius="8" Margin="0,10,0,0" Padding="10" Height="120">
+                    <Border Background="#fef5e7" CornerRadius="8" Margin="0,10,0,0" Padding="10" Height="120">
                         <DockPanel>
                             <Image x:Name="imgAd" Width="100" Height="100" Stretch="UniformToFill" DockPanel.Dock="Left" Margin="0,0,15,0"/>
                             <StackPanel>
                                 <TextBlock x:Name="txtAdTitle" Text="Ưu đãi tháng này: Giảm 20% cho hội viên mới!" 
-                                           FontWeight="Bold" FontSize="16" Foreground="#2980b9" Margin="0,0,0,5"/>
+                                           FontWeight="Bold" FontSize="16" Foreground="#e74c3c" Margin="0,0,0,5"/>
                                 <TextBlock x:Name="txtAdContent" Text="Đăng ký ngay để nhận ưu đãi và nhiều phần quà hấp dẫn khác." 
                                            FontSize="13" Foreground="#2c3e50"/>
                             </StackPanel>
